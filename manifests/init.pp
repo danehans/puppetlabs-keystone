@@ -66,6 +66,7 @@ class keystone(
   package { 'keystone':
     name   => $::keystone::params::package_name,
     ensure => $package_ensure,
+    tag    => "openstack",
   }
 
   group { 'keystone':
