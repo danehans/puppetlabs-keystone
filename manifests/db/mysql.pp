@@ -49,7 +49,7 @@ class keystone::db::mysql(
     host     => $host,
     # TODO does it make sense to support other charsets?
     charset  => $charset,
-    require  => Class['mysql::config'],
+    require  => Class['galera'],
   }
 
   if $allowed_hosts {
