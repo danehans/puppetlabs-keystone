@@ -44,12 +44,12 @@ class keystone(
   $public_port    = '5000',
   $admin_port     = '35357',
   $admin_token    = 'service_token',
-  $compute_port   = '3000',
+  $compute_port   = '8774',
   $log_verbose    = 'False',
   $log_debug      = 'False',
   $use_syslog     = 'False',
   $catalog_type   = 'sql',
-  $backend_driver = 'keystone.token.backends.kvs.Token',
+  $backend_driver = 'keystone.token.backends.sql.Token',
   $enabled        = true
 ) {
 
