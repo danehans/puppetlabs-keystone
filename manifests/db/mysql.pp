@@ -43,7 +43,7 @@ class keystone::db::mysql(
 
   require 'mysql::python'
 
-  mysql::db { $dbname:
+  galera::db { $dbname:
     user     => $user,
     password => $password,
     host     => $host,
@@ -61,6 +61,6 @@ class keystone::db::mysql(
   }
 
 
-  Mysql::Db[$dbname] ~> Exec<| title == 'keystone-manage db_sync' |>
+  Galera::Db[$dbname] ~> Exec<| title == 'keystone-manage db_sync' |>
 
 }
