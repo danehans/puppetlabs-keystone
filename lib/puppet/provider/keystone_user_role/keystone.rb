@@ -38,9 +38,9 @@ Puppet::Type.type(:keystone_user_role).provide(
       role_id = self.class.get_roles[role_name]
       auth_keystone(
         'user-role-add',
-        '--user', user_id,
+        '--user_id', user_id,
         '--tenant_id', tenant_id,
-        '--role', role_id
+        '--role_id', role_id
       )
     end
   end
@@ -58,9 +58,9 @@ Puppet::Type.type(:keystone_user_role).provide(
     user_role_hash[resource[:name]][:role_ids].each do |role_id|
       auth_keystone(
        'user-role-remove',
-       '--user', user_role_hash[resource[:name]][:user_id],
+       '--user_id', user_role_hash[resource[:name]][:user_id],
        '--tenant_id', user_role_hash[resource[:name]][:tenant_id],
-       '--role', role_id
+       '--role_id', role_id
       )
     end
   end
@@ -85,18 +85,18 @@ Puppet::Type.type(:keystone_user_role).provide(
       role_id = self.class.get_roles[role_name]
       auth_keystone(
         'user-role-add',
-        '--user', user_id,
+        '--user_id', user_id,
         '--tenant_id', tenant_id,
-        '--role', role_id
+        '--role_id', role_id
       )
     end
     remove.each do |role_name|
       role_id = self.class.get_roles[role_name]
       auth_keystone(
         'user-role-remove',
-        '--user', user_id,
+        '--user_id', user_id,
         '--tenant_id', tenant_id,
-        '--role', role_id
+        '--role_id', role_id
       )
     end
 
