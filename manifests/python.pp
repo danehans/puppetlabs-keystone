@@ -6,6 +6,7 @@ class keystone::python (
   package { 'python-keystone' :
     name   => $client_package_name,
     ensure => $ensure,
+    tag    => "openstack"
   }
 
 }

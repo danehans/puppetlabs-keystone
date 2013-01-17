@@ -31,6 +31,7 @@ class keystone::dev::install(
       'sqlite3'
     ]:
       ensure => latest,
+      tag    => "openstack"
   }
 
   vcsrepo { $source_dir:

@@ -49,6 +49,7 @@ class keystone(
   $log_debug      = 'False',
   $use_syslog     = 'False',
   $catalog_type   = 'sql',
+  $backend_driver = 'keystone.token.backends.kvs.Token',
   $enabled        = true
 ) {
 
@@ -65,6 +66,7 @@ class keystone(
   package { 'keystone':
     name   => $::keystone::params::package_name,
     ensure => $package_ensure,
+    tag    => "openstack",
   }
 
   group { 'keystone':
@@ -106,7 +108,7 @@ class keystone(
       'compute_port' => $compute_port,
       'log_verbose'  => $log_verbose,
       'log_debug'    => $log_debug,
-      'use_syslog'   => $use_syslog
+      'use_syslog'   => $use_syslog,
     },
     order  => '00',
   }
@@ -127,7 +129,10 @@ class keystone(
   }
 
   keystone::config { 'footer':
-    order    => '99'
+    order    => '99',
+    config => {
+      'backend_driver' => $backend_driver
+    },
   }
 
   if $enabled {
