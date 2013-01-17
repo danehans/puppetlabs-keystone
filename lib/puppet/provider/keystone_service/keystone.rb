@@ -84,11 +84,11 @@ Puppet::Type.type(:keystone_service).provide(
 
     def self.build_service_hash
       hash = {}
-      list_keystone_objects('service', 4).each do |user|
-        hash[user[1]] = {
-          :id          => user[0],
-          :type        => user[2],
-          :description => user[3]
+      list_keystone_objects('service', 4).each do |service|
+        hash[service[1]] = {
+          :id          => service[0],
+          :type        => service[2],
+          :description => service[3]
         }
       end
       hash

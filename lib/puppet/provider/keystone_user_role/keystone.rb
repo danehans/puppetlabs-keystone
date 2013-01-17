@@ -38,9 +38,9 @@ Puppet::Type.type(:keystone_user_role).provide(
       role_id = self.class.get_roles[role_name]
       auth_keystone(
         'user-role-add',
-        '--user', user_id,
+        '--user_id', user_id,
         '--tenant_id', tenant_id,
-        '--role', role_id
+        '--role_id', role_id
       )
     end
   end
@@ -58,9 +58,9 @@ Puppet::Type.type(:keystone_user_role).provide(
     user_role_hash[resource[:name]][:role_ids].each do |role_id|
       auth_keystone(
        'user-role-remove',
-       '--user', user_role_hash[resource[:name]][:user_id],
+       '--user_id', user_role_hash[resource[:name]][:user_id],
        '--tenant_id', user_role_hash[resource[:name]][:tenant_id],
-       '--role', role_id
+       '--role_id', role_id
       )
     end
   end
@@ -85,18 +85,18 @@ Puppet::Type.type(:keystone_user_role).provide(
       role_id = self.class.get_roles[role_name]
       auth_keystone(
         'user-role-add',
-        '--user', user_id,
+        '--user_id', user_id,
         '--tenant_id', tenant_id,
-        '--role', role_id
+        '--role_id', role_id
       )
     end
     remove.each do |role_name|
       role_id = self.class.get_roles[role_name]
       auth_keystone(
         'user-role-remove',
-        '--user', user_id,
+        '--user_id', user_id,
         '--tenant_id', tenant_id,
-        '--role', role_id
+        '--role_id', role_id
       )
     end
 
@@ -128,14 +128,14 @@ Puppet::Type.type(:keystone_user_role).provide(
     def self.list_user_roles(user_id, tenant_id)
       # this assumes that all returned objects are of the form
       # id, name, enabled_state, OTHER
-      number_columns = 2
-      role_output = auth_keystone('role-list', '--user', user_id, '--tenant_id', tenant_id)
+      number_columns = 4
+      role_output = auth_keystone('user-role-list', '--user-id', user_id, '--tenant-id', tenant_id)
       list = (role_output.split("\n")[3..-2] || []).collect do |line|
         row = line.split(/\s*\|\s*/)[1..-1]
         if row.size != number_columns
-          raise(Puppet::Error, "Expected #{number_columns} columns for #{type} row, found #{list.size}. Line #{line}")
+          raise(Puppet::Error, "Expected #{number_columns} columns for #{type} row, found #{row.size}. Line #{line}")
         end
-        row
+        row[0..1]
       end
       list
     end
@@ -143,8 +143,13 @@ Puppet::Type.type(:keystone_user_role).provide(
     def self.get_users(tenant_id='')
       @users = {}
 
-      list_keystone_objects('user', 4, tenant_id).each do |user|
-        @users[user[3]] = user[0]
+      if tenant_id != ''
+        tenant_args = ['--tenant-id', tenant_id]
+      else
+        tenant_args = []
+      end
+      list_keystone_objects('user', 4, *tenant_args).each do |user|
+        @users[user[1]] = user[0]
       end
       @users
     end
