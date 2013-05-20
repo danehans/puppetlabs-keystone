@@ -156,12 +156,16 @@ class keystone(
 
   keystone_config { 'signing/token_format': value => $token_format }
   if($token_format  == 'PKI') {
-    file { $cache_dir:
-      ensure => directory,
-    }
-    exec { '/usr/bin/keystone-manage pki_setup':
-      creates => '/etc/keystone/ssl/private/signing_key.pem'
-    }
+    keystone_config { 'ssl/enable': value => true }
+    include keystone::token_format::ssl
+#    file { $cache_dir:
+#      ensure => directory,
+#    }
+#    exec { '/usr/bin/keystone-manage pki_setup':
+#      creates => '/etc/keystone/ssl/private/signing_key.pem'
+#    }
+  } else {
+     keystone_config { 'ssl/enable': value => false }
   }
 
   if $enabled {
